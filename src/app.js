@@ -1,25 +1,6 @@
 const feathers = require('@feathersjs/feathers')
+const express = require('@feathersjs/express')
 const { BadRequest } = require('@feathersjs/errors')
-
-const app = feathers()
-
-app.use('todos', {
-  async get(name) {
-    return {
-      name,
-      text: `You have to do ${name}.`
-    }
-  }
-})
-
-async function getTodo(name) {
-  const service = app.service('todos')
-  const todo = await service.get(name)
-
-  console.log(todo)
-}
-
-getTodo('Peachy!')
 
 class Messages {
   constructor() {
@@ -67,72 +48,18 @@ class Messages {
   }
 }
 
+const app = express(feathers())
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+app.configure(express.rest())
+
 app.use('messages', new Messages())
+app.use(express.errorHandler())
 
-async function processMessages() {
-  app.service('messages').on('created', message => {
-    console.log('Created message', message)
-  })
+const server = app.listen(3030)
 
-  app.service('messages').on('removed', message => {
-    console.log('Removed message', message)
-  })
-
-  await app.service('messages').create({
-    text: 'First message'
-  })
-
-  await app.service('messages').create({
-    text: 3
-  })
-
-  await app.service('messages').create({
-    number: 4
-  })
-
-  const lastMessage = await app.service('messages').create({
-    text: 'Second messaage'
-  })
-
-  await app.service('messages').remove(lastMessage.id)
-
-  const messageList = await app.service('messages').find()
-
-  console.log('Available messages', messageList)
-}
-
-const setTimestamp = name => {
-  return async context => {
-    context.data[name] = new Date()
-
-    return context
-  }
-}
-
-const validate = async context => {
-  const { data } = context
-
-  if (!data.text) {
-    throw new BadRequest('Message text must exist')
-  }
-
-  context.data = {
-    text: data.text.toString()
-  }
-}
-
-app.service('messages').hooks({
-  before: {
-    create: [validate, setTimestamp('createdAt')],
-    update: [validate, setTimestamp('updatedAt')],
-    patch: [validate, setTimestamp('updatedAt')]
-  }
+app.service('messages').create({
+  text: 'Hello from Peachy!'
 })
 
-app.hooks({
-  error: async context => {
-    console.error(`Error in ${context.path} service method ${service.method}`, context.erro.stack)
-  }
-})
-
-processMessages()
+server.on('listening', () => console.log('Feathers REST API started at http://localhost:3030'))
