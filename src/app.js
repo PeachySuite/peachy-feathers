@@ -1,65 +1,50 @@
-const feathers = require('@feathersjs/feathers')
-const express = require('@feathersjs/express')
-const { BadRequest } = require('@feathersjs/errors')
+const path = require('path');
+const favicon = require('serve-favicon');
+const compress = require('compression');
+const helmet = require('helmet');
+const cors = require('cors');
+const logger = require('./logger');
 
-class Messages {
-  constructor() {
-    this.messages = []
-    this.currentId = 0
-  }
+const feathers = require('@feathersjs/feathers');
+const configuration = require('@feathersjs/configuration');
+const express = require('@feathersjs/express');
+const socketio = require('@feathersjs/socketio');
 
-  async find(params) {
-    return this.messages
-  }
 
-  async get(id, params) {
-    const message = this.messages.find(message => message.id = parseInt(id, 10))
+const middleware = require('./middleware');
+const services = require('./services');
+const appHooks = require('./app.hooks');
+const channels = require('./channels');
 
-    if(!message) {
-      throw new Error(`Message with id ${id} not found`)
-    }
+const app = express(feathers());
 
-    return message
-  }
+// Load app configuration
+app.configure(configuration());
+// Enable security, CORS, compression, favicon and body parsing
+app.use(helmet());
+app.use(cors());
+app.use(compress());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
+// Host the public folder
+app.use('/', express.static(app.get('public')));
 
-  async create(data, params) {
-    const message = Object.assign({
-      id: ++ this.currentId
-    }, data)
+// Set up Plugins and providers
+app.configure(express.rest());
+app.configure(socketio());
 
-    this.messages.push(message)
+// Configure other middleware (see `middleware/index.js`)
+app.configure(middleware);
+// Set up our services (see `services/index.js`)
+app.configure(services);
+// Set up event channels (see channels.js)
+app.configure(channels);
 
-    return message
-  }
+// Configure a middleware for 404s and the error handler
+app.use(express.notFound());
+app.use(express.errorHandler({ logger }));
 
-  async patch(id, data, params) {
-    const message = await this.get(id)
+app.hooks(appHooks);
 
-    return Object.assign(message, data)
-  }
-
-  async remove(id, params) {
-    const message = await this.get(id)
-    const index = this.messages.indexOf(message)
-
-    this.messages.splice(index, 1)
-
-    return message
-  }
-}
-
-const app = express(feathers())
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.configure(express.rest())
-
-app.use('messages', new Messages())
-app.use(express.errorHandler())
-
-const server = app.listen(3030)
-
-app.service('messages').create({
-  text: 'Hello from Peachy!'
-})
-
-server.on('listening', () => console.log('Feathers REST API started at http://localhost:3030'))
+module.exports = app;
