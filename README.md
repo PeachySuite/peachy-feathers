@@ -1,6 +1,6 @@
 # peachy-feathers
 
-> Feathers api for Peachy
+> Feathers api for Peachy!
 
 ## About
 

@@ -1,11 +1,9 @@
 const clients = require('./clients/clients.service.js');
-const staff = require('./staff/staff.service.js');
-const testvisits = require('./testvisits/testvisits.service.js');
-const caregivers = require('./caregivers/caregivers.service.js');
+const employees = require('./employees/employees.service.js');
+const visits = require('./visits/visits.service.js');
 // eslint-disable-next-line no-unused-vars
 module.exports = function (app) {
   app.configure(clients);
-  app.configure(staff);
-  app.configure(testvisits);
-  app.configure(caregivers);
+  app.configure(employees);
+  app.configure(visits);
 };
