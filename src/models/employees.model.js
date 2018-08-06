@@ -1,5 +1,5 @@
 // employees-model.js - A mongoose model
-// 
+//
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 module.exports = function (app) {
@@ -11,5 +11,5 @@ module.exports = function (app) {
     timestamps: true
   });
 
-  return mongooseClient.model('employees', employees);
+  return mongooseClient.model('caregivers', employees);
 };

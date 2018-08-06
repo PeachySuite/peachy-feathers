@@ -18,7 +18,7 @@
     "test": "test/"
   },
   "engines": {
-    "node": "^8.0.0",
+    "node": "^10.0.0",
     "yarn": ">= 0.18.0"
   },
   "scripts": {
@@ -31,6 +31,9 @@
   "author": "Peachy",
   "license": "MIT",
   "dependencies": {
+    "@feathersjs/authentication": "^2.1.7",
+    "@feathersjs/authentication-jwt": "^2.0.1",
+    "@feathersjs/authentication-local": "^1.2.1",
     "@feathersjs/configuration": "^2.0.0",
     "@feathersjs/errors": "^3.3.0",
     "@feathersjs/express": "^1.2.3",
