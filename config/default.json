@@ -6,5 +6,29 @@
     "default": 10,
     "max": 50
   },
-  "mongodb": "mongodb://user:password@ds253871.mlab.com:53871/peachy_dev"
+  "mongodb": "MONGODB_URI",
+  "authentication": {
+    "secret": "AUTH_SECRET",
+    "strategies": [
+      "jwt",
+      "local"
+    ],
+    "path": "/authentication",
+    "service": "users",
+    "jwt": {
+      "header": {
+        "typ": "access"
+      },
+      "audience": "https://api.peachysuite.com",
+      "subject": "anonymous",
+      "issuer": "PeachyFeathers",
+      "algorithm": "HS256",
+      "expiresIn": "1d"
+    },
+    "local": {
+      "entity": "user",
+      "usernameField": "email",
+      "passwordField": "password"
+    }
+  }
 }
