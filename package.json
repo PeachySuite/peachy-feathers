@@ -1,18 +1,21 @@
 {
   "name": "peachy-feathers",
   "description": "Feathers api for Peachy!",
-  "version": "0.0.0",
-  "homepage": "",
+  "version": "0.1.0",
   "main": "src",
   "keywords": [
     "feathers"
   ],
-  "author": {
-    "name": "jthetzel",
-    "email": "jthetzel@gmail.com"
+  "repository": {
+  "type": "git",
+  "url": "https://github.com/PeachySuite/peachy-feathers.git"
   },
-  "contributors": [],
-  "bugs": {},
+  "author": "Peachy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PeachySuite/peachy-feathers/issues"
+  },
+  "homepage": "https://www.peachysuite.com",
   "directories": {
     "lib": "src",
     "test": "test/"
@@ -27,9 +30,6 @@
     "start": "node src/",
     "mocha": "mocha test/ --recursive --exit"
   },
-  "keywords": [],
-  "author": "Peachy",
-  "license": "MIT",
   "dependencies": {
     "@feathersjs/authentication": "^2.1.7",
     "@feathersjs/authentication-jwt": "^2.0.1",
