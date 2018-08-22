@@ -7,8 +7,8 @@
     "feathers"
   ],
   "repository": {
-  "type": "git",
-  "url": "https://github.com/PeachySuite/peachy-feathers.git"
+    "type": "git",
+    "url": "https://github.com/PeachySuite/peachy-feathers.git"
   },
   "author": "Peachy",
   "license": "MIT",
@@ -41,6 +41,7 @@
     "@feathersjs/socketio": "^3.2.2",
     "compression": "^1.7.3",
     "cors": "^2.8.4",
+    "dotenv": "^6.0.0",
     "feathers-mongoose": "^6.1.2",
     "helmet": "^3.13.0",
     "mongoose": "^5.2.6",
